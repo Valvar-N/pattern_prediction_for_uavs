@@ -22,6 +22,8 @@ list_of_files = [
     111
 ]
 
+output_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "structured_datas")
+
 for item in list_of_files:
     file_path = utils.find_file_path("raw_datas", f"{item}.csv")
     # Load your data
@@ -45,21 +47,15 @@ for item in list_of_files:
     df.reset_index(drop=True, inplace=True)
 
     df["yaw_rad"] = np.deg2rad(df["yaw"])
-    df["yaw_unwrapped"] = np.unwrap(df["yaw_rad"])  # fix 360 → 0 wrap
 
-    df["yaw_rate"] = df["yaw_unwrapped"].diff() / df["time_diff"].diff()
-    df["yaw_rate_deg"] = np.rad2deg(df["yaw_rate"])
+    df["yaw_rate"] = df["yaw_rad"].diff() / df["time_diff"].diff()
 
     df.dropna(inplace=True)
     df.reset_index(drop=True, inplace=True)
-
-    distances = [0]
-    for i in range(1, len(df)):
-        dist = utils.haversine(df.iloc[i], df.iloc[i - 1])
-        distances.append(dist)
-
-    df["distance_m"] = distances
-    df["total_distance"] = df["distance_m"].cumsum()
+    
+    df['roll_std'] = df['roll'].rolling(30).std()
+    df['yaw_rate_mean'] = df['yaw_rate'].rolling(30).mean()
+    df['speed_var'] = df['speed'].rolling(30).var()
 
     df.drop(
         columns=[
@@ -74,4 +70,6 @@ for item in list_of_files:
     )
     df.dropna(inplace=True)
 
-    df.to_excel(f"processed_{item}.xlsx", index=False)
+    # Save to structured_datas folder
+    output_path = os.path.join(output_dir, f"processed_{item}.xlsx")
+    df.to_excel(output_path, index=False)
