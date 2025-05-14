@@ -74,4 +74,4 @@ for item in list_of_files:
     )
     df.dropna(inplace=True)
 
-    df.to_csv(f"processed_{item}.csv", index=False)
+    df.to_excel(f"processed_{item}.xlsx", index=False)
