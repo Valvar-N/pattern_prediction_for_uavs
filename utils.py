@@ -51,4 +51,4 @@ def loiter_radius(speed_mps, roll_deg):
     roll_rad = math.radians(roll_deg)
     if abs(math.tan(roll_rad)) < 1e-6:
         return float('inf')  # straight flight
-    return (speed_mps ** 2) / (g * math.tan(roll_rad))
+    return abs((speed_mps ** 2) / (g * math.tan(roll_rad)))

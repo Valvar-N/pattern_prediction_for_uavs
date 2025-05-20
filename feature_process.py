@@ -14,13 +14,14 @@ WINDOW_SIZE = 100  # samples (10 sec)
 SPEED_STABILITY_THRESHOLD = 2  # m/s standard deviation
 
 
-output_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "structured_datas")
+output_dir = os.path.join(
+    os.path.dirname(os.path.abspath(__file__)), "structured_datas"
+)
 
 for item in list_of_files:
-    # --- Load your data ---
+    # --- Load data ---
     file_name = utils.find_file_path("structured_datas", f"processed_{item}.xlsx")
     df = pd.read_excel(file_name)  # or use the uploaded file
-    # Assumes columns: 'speed', 'roll' (deg)
 
     df["loiter_radius"] = df.apply(
         lambda row: utils.loiter_radius(row["speed"], row["roll"]), axis=1
@@ -42,13 +43,12 @@ for item in list_of_files:
             window["loiter_radius"].replace([np.inf, -np.inf], np.nan).dropna().mean()
         )
 
-        # You can define your own loitering logic here
-        # Example: if average roll > 15 degrees, label as "loiter"
         if (
             (avg_radius < RADIUS_THRESHOLD)
-            and (avg_roll > ROLL_THRESHOLD_DEG)
+            and (abs(avg_roll) > ROLL_THRESHOLD_DEG) # use abs() because roll can be negative for left turn
             and (speed_std < SPEED_STABILITY_THRESHOLD)
         ):
+
             label = "loiter"
         else:
             label = "non-loiter"
@@ -67,6 +67,8 @@ for item in list_of_files:
     summary_df = pd.DataFrame(summary_rows)
 
     # --- Save the processed data ---
-    output_dir = utils.find_file_path("structured_datas", f"processed_{item}_with_labels.xlsx")
+    output_dir = utils.find_file_path(
+        "structured_datas", f"processed_{item}_with_labels.xlsx"
+    )
     summary_df.to_excel(output_dir, index=False)
     print(f"Processed data saved to {output_dir}")

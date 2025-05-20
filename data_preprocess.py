@@ -5,37 +5,24 @@ from haversine import haversine, Unit
 import os
 import utils
 
-# List of csv file numbers pulled from log files of UAV
-list_of_files = [
-    67,
-    68,
-    69,
-    79,
-    81,
-    86,
-    88,
-    89,
-    90,
-    102,
-    106,
-    109,
-    111
-]
 
-output_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "structured_datas")
+output_dir = os.path.join(
+    os.path.dirname(os.path.abspath(__file__)), "structured_datas"
+)
 
-for item in list_of_files:
+for item in utils.list_of_files:
     file_path = utils.find_file_path("raw_datas", f"{item}.csv")
     # Load your data
     df = pd.read_csv(file_path)
-
-    # Convert the 'timestamp(ms)' column to seconds
-    df["time_s"] = (df["timestamp(ms)"].iloc[0]) / 1000.0
-    df["time_diff"] = (df["timestamp(ms)"] - df["timestamp(ms)"].iloc[0]) / 1000.0
-
     # Normalize gps data
     df["lat"] = df["GPS[0].Lat"] / 1e7
     df["lon"] = df["GPS[0].Lng"] / 1e7
+    df = df[df["GPS[0].Lat"] != 0]
+    df = df[df["GPS[0].Lng"] != 0] # Delete rows with no GPS data
+
+    # Convert the 'timestamp(ms)' column to seconds
+    df["time_s"] = (df["timestamp(ms)"]) / 1000.0
+    df["time_diff"] = (df["timestamp(ms)"] - df["timestamp(ms)"].iloc[0]) / 1000.0
 
     # Clear noise in the data
     df["speed"] = df["GPS[0].Spd"].rolling(window=5).mean()
@@ -52,10 +39,10 @@ for item in list_of_files:
 
     df.dropna(inplace=True)
     df.reset_index(drop=True, inplace=True)
-    
-    df['roll_std'] = df['roll'].rolling(30).std()
-    df['yaw_rate_mean'] = df['yaw_rate'].rolling(30).mean()
-    df['speed_var'] = df['speed'].rolling(30).var()
+
+    df["roll_std"] = df["roll"].rolling(30).std()
+    df["yaw_rate_mean"] = df["yaw_rate"].rolling(30).mean()
+    df["speed_var"] = df["speed"].rolling(30).var()
 
     df.drop(
         columns=[
