@@ -1,7 +1,11 @@
 # 📡 İHA Davranış Tahmini - Loitering Algılama Projesi
 
 ## 🧠 Proje Amacı  
-Bu projenin amacı, **insansız hava araçlarının (İHA)** hareket örüntülerini analiz ederek **loitering (dairesel bekleme) davranışını** tespit edebilen bir model geliştirmektir. Özellikle askeri ve sivil uygulamalarda, bir İHA'nın niyetini (keşif mi yapıyor, saldırı mı hazırlıyor, bekliyor mu) anlamak büyük stratejik avantajlar sağlar.  
+İnsansız hava araçlarının hareket örüntülerinin tahminlenmesi hem askeri hem de sivil kapsamda büyük önem arz etmektedir. Özellikle yapay zeka destekli İHA’lar ortaya çıkarken ve yatırımlar giderek artarken İHA’ların davranışlarının önceden tahmin edilebilmesi güvenlik, operasyonel verimlilik ve stratejik planlama açısından kritik bir rol oynamaktadır. 
+Geliştirilebilir bir projenin ilk adımı olarak yorumladığımız bu çalışma şimdilik sadece sabit kanat İHA'larda loiter (dönerek bekleme) hareketini tahminlemektedir. 
+
+### Bu çalışmada ESTÜ Anatolia Aero Design proje ekibininden sağlanan uçuş kayıt verileri kullanılmıştır.
+
 
 ## 📌 Hedeflenen Davranış: Loitering  
 Loitering, bir İHA'nın belirli bir bölge etrafında dairesel şekilde veya düşük hızda bekleyerek o bölgeyi gözlemlemesi anlamına gelir. Bu proje, bu tür davranışları otomatik olarak tespit edebilmek için veri analizi ve makine öğrenmesi yöntemleri kullanır.
@@ -10,7 +14,7 @@ Loitering, bir İHA'nın belirli bir bölge etrafında dairesel şekilde veya d�
 
 ## 📁 Veri Seti Özeti  
 
-- Toplam veri süresi: Yaklaşık birkaç dakika (örnekleme: 10 Hz)
+- Toplam veri süresi
 - Kullanılan özellikler:
   - `roll` (yatış açısı)
   - `speed` (hız)
