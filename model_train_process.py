@@ -161,3 +161,113 @@ grid.fit(X_train, y_train)
 
 print("En iyi parametreler:", grid.best_params_)
 print("En iyi doğruluk:", grid.best_score_)
+
+
+
+
+import numpy as np
+
+# Sadece 2 feature seçiyoruz
+X_2d = df[['average_roll', 'loiter_radius']]
+y_2d = y_encoded
+
+# Eğitim-test bölünmesi
+X_train_2d, X_test_2d, y_train_2d, y_test_2d = train_test_split(X_2d, y_2d, test_size=0.2, random_state=42)
+
+# Modeli eğit
+lr_2d = LogisticRegression(random_state=42)
+lr_2d.fit(X_train_2d, y_train_2d)
+
+# Karar sınırı için meshgrid oluştur
+x_min, x_max = X_2d['average_roll'].min() - 0.5, X_2d['average_roll'].max() + 0.5
+y_min, y_max = X_2d['loiter_radius'].min() - 0.01, X_2d['loiter_radius'].max() + 0.01
+xx, yy = np.meshgrid(np.linspace(x_min, x_max, 300),
+                     np.linspace(y_min, y_max, 300))
+
+Z = lr_2d.predict(np.c_[xx.ravel(), yy.ravel()])
+Z = Z.reshape(xx.shape)
+
+# Grafik çizimi
+plt.figure(figsize=(8, 6))
+plt.contourf(xx, yy, Z, alpha=0.3, cmap='coolwarm')
+plt.scatter(X_train_2d['average_roll'], X_train_2d['loiter_radius'], c=y_train_2d, cmap='coolwarm', edgecolor='k', label='Train')
+plt.scatter(X_test_2d['average_roll'], X_test_2d['loiter_radius'], c=y_test_2d, cmap='coolwarm', marker='x', label='Test')
+plt.xlabel('average_roll')
+plt.ylabel('loiter_radius')
+plt.title('Logistic Regression Karar Sınırı (Train ve Test Veri Seti)')
+plt.legend()
+plt.show()
+
+
+
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+# Veriyi yükle
+
+
+# Özelliklerin Dağılımı
+plt.figure(figsize=(18, 5))
+
+# Average Roll Dağılımı
+plt.subplot(1, 3, 1)
+sns.histplot(df['average_roll'], kde=False, color='orange', bins=30)
+plt.title('average_roll dağılımı')
+
+# Speed Std Dağılımı
+plt.subplot(1, 3, 2)
+sns.histplot(df['speed_std'], kde=False, color='orange', bins=30)
+plt.title('speed_std dağılımı')
+
+# Loiter Radius Dağılımı
+plt.subplot(1, 3, 3)
+sns.histplot(df['loiter_radius'], kde=False, color='orange', bins=30)
+plt.title('loiter_radius dağılımı')
+
+plt.tight_layout()
+plt.show()
+
+
+
+import seaborn as sns
+
+sns.pairplot(df, hue='label', vars=features, diag_kind='kde', plot_kws={'alpha':0.6})
+plt.suptitle('Özelliklerin Pairplot’u (Loiter / Non-loiter)', y=1.02)
+plt.show()
+
+
+
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import classification_report
+
+# Model oluştur
+lr_model = LogisticRegression(random_state=42)
+
+# Eğit
+lr_model.fit(X_train, y_train)
+
+# Tahmin yap
+y_pred_lr = lr_model.predict(X_test)
+
+# Performans raporu
+print("Logistic Regression Performans:")
+print(classification_report(y_test, y_pred_lr, target_names=le.classes_))
+
+
+
+
+from sklearn.ensemble import RandomForestClassifier
+
+rf_model = RandomForestClassifier(random_state=42)
+
+rf_model.fit(X_train, y_train)
+
+y_pred_rf = rf_model.predict(X_test)
+
+print("Random Forest Performans:")
+print(classification_report(y_test, y_pred_rf, target_names=le.classes_))
+
+
+
+
