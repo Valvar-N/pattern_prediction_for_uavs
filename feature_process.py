@@ -21,7 +21,7 @@ output_dir = os.path.join(
 for item in list_of_files:
     # --- Load data ---
     file_name = utils.find_file_path("structured_datas", f"processed_{item}.xlsx")
-    df = pd.read_excel(file_name)  # or use the uploaded file
+    df = pd.read_excel(file_name)
 
     df["loiter_radius"] = df.apply(
         lambda row: utils.loiter_radius(row["speed"], row["roll"]), axis=1

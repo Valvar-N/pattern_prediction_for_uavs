@@ -12,7 +12,7 @@ output_dir = os.path.join(
 
 for item in utils.list_of_files:
     file_path = utils.find_file_path("raw_datas", f"{item}.csv")
-    # Load your data
+    # Load data
     df = pd.read_csv(file_path)
     # Normalize gps data
     df["lat"] = df["GPS[0].Lat"] / 1e7
