@@ -62,12 +62,6 @@ Model girişleri, 10 saniyelik zaman dilimlerine ait özetlerle oluşturulur:
 
 ---
 
-## 📊 Görsel Örnekler
-Karar sınırları ve doğru/yanlış sınıflandırmalar:
-
-![Confusion Matrix](figures/confusion_matrix.png)
-
----
 
 ## 📚 Atıf Verilen Kaynaklar
 
