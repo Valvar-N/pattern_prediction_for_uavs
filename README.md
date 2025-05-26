@@ -8,7 +8,7 @@ Geliştirilebilir bir projenin ilk adımı olarak yorumladığımız bu çalış
 
 
 ## 📌 Hedeflenen Davranış: Loitering  
-Loitering, bir İHA'nın belirli bir bölge etrafında dairesel şekilde veya düşük hızda bekleyerek o bölgeyi gözlemlemesi anlamına gelir. Bu proje, bu tür davranışları otomatik olarak tespit edebilmek için veri analizi ve makine öğrenmesi yöntemleri kullanır.
+Loitering, bir İHA'nın belirli bir bölge etrafında dairesel şekilde veya düşük hızda beklemesi anlamına gelir. Bu proje, bu tür davranışları otomatik olarak tespit edebilmek için veri analizi ve makine öğrenmesi yöntemleri kullanır.
 
 ---
 
